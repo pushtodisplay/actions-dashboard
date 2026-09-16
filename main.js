@@ -21,8 +21,7 @@
  *
  * Reads inputs from INPUT_* env (set by the runner from action.yml inputs):
  *   INPUT_STEPS-JSON, INPUT_PROGRESS, INPUT_API-KEY, INPUT_API-URL,
- *   INPUT_BOARD-ID, INPUT_PANEL-ID, INPUT_PRD-PANEL, INPUT_DEV-PANEL,
- *   INPUT_PRD-BRANCH, INPUT_LABEL
+ *   INPUT_BOARD-ID, INPUT_PANEL-ID, INPUT_LABEL
  * plus runner env: GITHUB_WORKFLOW, GITHUB_JOB, GITHUB_REF, GITHUB_REF_NAME,
  *   GITHUB_HEAD_REF, GITHUB_SHA, GITHUB_OUTPUT
  * plus fallbacks: PUSH_TO_DISPLAY_API_KEY, PUSH_TO_DISPLAY_BOARD.
@@ -46,7 +45,7 @@ const BACKGROUND = "#2c3e50";
 
 // Branch name color follows the sendnotification env convention (stg amber,
 // prd green, dev blue, anything else gray), lightened where needed to clear
-// 4.5:1 on the background. "prd" = the prd-branch input (default main).
+// 4.5:1 on the background. "prd" = the main branch.
 const ENV_COLOR = {
   prd: "#2ecc71", // 5.23:1
   stg: "#f5b041", // 5.84:1
@@ -172,18 +171,14 @@ function getSelfJob() {
   return env.GITHUB_JOB || "";
 }
 
+// Explicit panel-id wins; otherwise every branch reports to panel 1.
 function resolvePanel() {
-  const override = input("panel-id");
-  if (override) return override;
-  const prdBranch = input("prd-branch") || "main";
-  return env.GITHUB_REF === `refs/heads/${prdBranch}`
-    ? input("prd-panel") || "1"
-    : input("dev-panel") || "2";
+  return input("panel-id") || "1";
 }
 
 function branchColor() {
   const branch = getBranch();
-  if (branch === (input("prd-branch") || "main")) return ENV_COLOR.prd;
+  if (branch === "main") return ENV_COLOR.prd;
   if (branch === "stg") return ENV_COLOR.stg;
   if (branch === "dev") return ENV_COLOR.dev;
   return ENV_COLOR.other;

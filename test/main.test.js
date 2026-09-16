@@ -161,15 +161,6 @@ test("branch color follows the sendnotification env convention", () => {
   assert.strictEqual(action.branchColor(), "#aab7b8");
 });
 
-test("branch color honors a custom prd-branch", () => {
-  setEnv({
-    GITHUB_REF: "refs/heads/prod",
-    GITHUB_REF_NAME: "prod",
-    "INPUT_PRD-BRANCH": "prod",
-  });
-  assert.strictEqual(action.branchColor(), "#2ecc71");
-});
-
 test("status palette clears 4.5:1 on the background", () => {
   for (const hex of [
     "#e8e8e8",
@@ -405,25 +396,18 @@ test("unparsable steps-json warns and pushes metadata only", () => {
 
 // ---------- panel resolution ----------
 
-test("panel: main branch goes to prd panel, other branches to dev panel", () => {
+test("panel: defaults to panel 1 on any branch", () => {
   setEnv({ GITHUB_REF: "refs/heads/main", GITHUB_REF_NAME: "main" });
   assert.strictEqual(action.resolvePanel(), "1");
   setEnv({ GITHUB_REF: "refs/heads/dev", GITHUB_REF_NAME: "dev" });
-  assert.strictEqual(action.resolvePanel(), "2");
+  assert.strictEqual(action.resolvePanel(), "1");
+  setEnv({ GITHUB_REF: "refs/pull/42/merge", GITHUB_REF_NAME: "42/merge" });
+  assert.strictEqual(action.resolvePanel(), "1");
 });
 
-test("panel: explicit panel-id wins over branch", () => {
+test("panel: explicit panel-id wins", () => {
   setEnv({ "INPUT_PANEL-ID": "3", GITHUB_REF: "refs/heads/dev" });
   assert.strictEqual(action.resolvePanel(), "3");
-});
-
-test("panel: prd-branch input overrides default main", () => {
-  setEnv({
-    GITHUB_REF: "refs/heads/prod",
-    GITHUB_REF_NAME: "prod",
-    "INPUT_PRD-BRANCH": "prod",
-  });
-  assert.strictEqual(action.resolvePanel(), "1");
 });
 
 // ---------- push: mocked fetch ----------
@@ -512,7 +496,7 @@ test("run(): missing key + temp output file — warns, writes panel-id, exit 0",
     assert.strictEqual(process.exitCode, 0);
     assert.ok(cap.logs.some((l) => l.includes("missing API key")));
     const written = fs.readFileSync(outFile, "utf8");
-    assert.ok(written.includes("panel-id<<PTD_EOF\n2\nPTD_EOF"));
+    assert.ok(written.includes("panel-id<<PTD_EOF\n1\nPTD_EOF"));
   } finally {
     fetchMock.restore();
     cap.restore();

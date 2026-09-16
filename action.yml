@@ -24,20 +24,8 @@ inputs:
     description: "Board ID to push to. Optional when the workflow or job sets env PUSH_TO_DISPLAY_BOARD. Omit to use the account's default board."
     required: false
   panel-id:
-    description: "Explicit panel ID (1-4). Overrides branch-based resolution."
+    description: "Explicit panel ID (1-4). Defaults to panel 1."
     required: false
-  prd-panel:
-    description: "Panel ID used when the run is on the prd branch."
-    required: false
-    default: "1"
-  dev-panel:
-    description: "Panel ID used when the run is on any other branch."
-    required: false
-    default: "2"
-  prd-branch:
-    description: "Branch name treated as production."
-    required: false
-    default: "main"
   label:
     description: "Label shown on the board. Defaults to the workflow name."
     required: false
