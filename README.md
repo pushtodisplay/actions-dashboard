@@ -2,10 +2,20 @@
 
 Live GitHub Actions job status on your [Push to Display](https://pushtodisplay.com) board, reported **from inside each job** — one step, any position, own job only.
 
-No GitHub API. No `GITHUB_TOKEN`. No rate limits. No permissions. Runs as a `node20` action (the runner's bundled Node — no system Node required) and talks to the same Push to Display API as [`pushtodisplay/action`](https://github.com/pushtodisplay/action).
+No GitHub API. No `GITHUB_TOKEN`. No rate limits. No permissions. Runs as a `node20` action (the runner's bundled Node — no system Node required) and shares the Push to Display API with [`pushtodisplay/action`](https://github.com/pushtodisplay/action), the general-purpose push action.
 
 <p align="center">
   <img src="assets/consolidated-multiple-repo-cicd-in-same-display-4-panel.png" alt="Push to Display — multi-repo CI/CD status consolidated on a 4-panel display" width="600" />
+</p>
+
+## Get the app
+
+Turn any screen into a live display board — get Push to Display on iOS and Android.
+
+<p align="center">
+  <a href="https://apps.apple.com/app/push-to-display/id6754677853"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="40" /></a>
+  &nbsp;
+  <a href="https://play.google.com/store/apps/details?id=com.pushtodisplay"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="60" /></a>
 </p>
 
 ## How it works
@@ -110,3 +120,7 @@ The action never fails a workflow. Missing key, bad key, board API down, timeout
   <img src="assets/display-incident-timeline.png" alt="Incident timeline display" width="600" /><br />
   <em>Incident timeline with color-coded severity</em>
 </p>
+
+## Related
+
+- [`pushtodisplay/action`](https://github.com/pushtodisplay/action) — push arbitrary text or blocks to your board from any workflow step.
