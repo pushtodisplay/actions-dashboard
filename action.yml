@@ -1,0 +1,51 @@
+name: "Actions Dashboard"
+description: "One report step per job, any position — own-job status on a Push to Display board. No GitHub API, no GITHUB_TOKEN, no permissions."
+author: "Goban Source, LLC"
+
+branding:
+  icon: "monitor"
+  color: "blue"
+
+inputs:
+  steps-json:
+    description: "Serialized steps context of the calling job (the workflow passes toJSON(steps)). Only steps that declare an id: are included — GitHub itself computes this list. Empty context means the report step is first: status 'started'. Otherwise the job's status: done, failed, cancelled, or in progress."
+    required: false
+  progress:
+    description: "Set to true on report steps placed in the middle of a job — the job is still running, so the status is 'in progress' instead of 'done'. Leave unset on the first or last report step. A failure or cancellation is always reported as such."
+    required: false
+  api-key:
+    description: "API key for authentication. Optional when the workflow or job sets env PUSH_TO_DISPLAY_API_KEY."
+    required: false
+  api-url:
+    description: "Base URL of the Push to Display API. Override only for self-hosted instances or testing."
+    required: false
+    default: "https://api.pushtodisplay.com"
+  board-id:
+    description: "Board ID to push to. Optional when the workflow or job sets env PUSH_TO_DISPLAY_BOARD. Omit to use the account's default board."
+    required: false
+  panel-id:
+    description: "Explicit panel ID (1-4). Overrides branch-based resolution."
+    required: false
+  prd-panel:
+    description: "Panel ID used when the run is on the prd branch."
+    required: false
+    default: "1"
+  dev-panel:
+    description: "Panel ID used when the run is on any other branch."
+    required: false
+    default: "2"
+  prd-branch:
+    description: "Branch name treated as production."
+    required: false
+    default: "main"
+  label:
+    description: "Label shown on the board. Defaults to the workflow name."
+    required: false
+
+outputs:
+  panel-id:
+    description: "The panel ID that was used"
+
+runs:
+  using: "node20"
+  main: "main.js"

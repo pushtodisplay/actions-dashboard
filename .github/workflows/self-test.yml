@@ -1,0 +1,45 @@
+name: Self test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # Pure logic: rendering, positions (mocked always()), panels, fail-soft.
+  # Runs the action's exported functions with mocked fetch — no network,
+  # no real board, no real key.
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: node --test
+
+  # Runner-level smoke: what unit tests cannot reach — the runner accepts
+  # action.yml, evaluates ${{ toJSON(steps) }}, delivers INPUT_*, and the
+  # report step runs in any position. Keyless: warnings only, exit 0.
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        id: checkout
+      - name: Report to display (first)
+        uses: ./
+        with:
+          steps-json: ${{ toJSON(steps) }}
+      - name: Simulated work
+        id: work
+        run: echo "doing some work"
+      - name: Report to display (middle)
+        uses: ./
+        with:
+          steps-json: ${{ toJSON(steps) }}
+          progress: "true"
+      - name: Simulated work 2
+        id: work2
+        run: echo "doing more work"
+      - name: Report to display (end)
+        if: always()
+        uses: ./
+        with:
+          steps-json: ${{ toJSON(steps) }}
