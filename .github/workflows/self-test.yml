@@ -2,7 +2,7 @@ name: Self test
 
 on:
   push:
-    branches: [main]
+    branches: [main, dogfood]
   pull_request:
 
 jobs:
