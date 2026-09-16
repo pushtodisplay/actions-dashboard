@@ -4,6 +4,10 @@ Live GitHub Actions job status on your [Push to Display](https://pushtodisplay.c
 
 No GitHub API. No `GITHUB_TOKEN`. No rate limits. No permissions. Runs as a `node20` action (the runner's bundled Node — no system Node required) and talks to the same Push to Display API as [`pushtodisplay/action`](https://github.com/pushtodisplay/action).
 
+<p align="center">
+  <img src="assets/consolidated-multiple-repo-cicd-in-same-display-4-panel.png" alt="Push to Display — multi-repo CI/CD status consolidated on a 4-panel display" width="600" />
+</p>
+
 ## How it works
 
 Add one report step to a job. The status is derived from the calling workflow's `steps` context (`${{ toJSON(steps) }}`) — computed by GitHub itself, exact by construction:
@@ -89,3 +93,20 @@ Each push overwrites the same panel — the board keeps only the latest message.
 ## Failure behavior
 
 The action never fails a workflow. Missing key, bad key, board API down, timeouts — all become a `::warning::` line and a clean exit 0. Requests are time-boxed (30s), no retries.
+
+## Screenshots
+
+<p align="center">
+  <img src="assets/consolidated-multiple-repo-cicd-in-same-display-4-panel.png" alt="Multi-repo CI/CD status consolidated on a 4-panel display" width="600" /><br />
+  <em>4-panel layout — multi-repo CI/CD status and deployment logs at a glance</em>
+</p>
+
+<p align="center">
+  <img src="assets/display-2-panel-logs.png" alt="2-panel layout with CI/CD logs" width="600" /><br />
+  <em>Multi-panel with CI/CD pipeline and infrastructure logs</em>
+</p>
+
+<p align="center">
+  <img src="assets/display-incident-timeline.png" alt="Incident timeline display" width="600" /><br />
+  <em>Incident timeline with color-coded severity</em>
+</p>
