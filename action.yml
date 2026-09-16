@@ -1,5 +1,5 @@
 name: "Actions Dashboard"
-description: "One report step per job, any position — own-job status on a Push to Display board. No GitHub API, no GITHUB_TOKEN, no permissions."
+description: "Consolidated GitHub Actions dashboard — add this action anywhere in your workflow, real-time updates on a device screen."
 author: "Goban Source, LLC"
 
 branding:
